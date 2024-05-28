@@ -5,11 +5,19 @@ Shop that is designed to be scalable
 
 A word of warning, this Kafka deployment and configuration is meant as a PoC and although it includes user/pass authentication it crucially does not include Encryption. That means if you connect to it from outside the cluster without encrypting traffic in another way, *Traffic to the cluster will be visible even if you authenticated*
 
-### Kubernetes Deployment
+### Install & Upgrade
 
-K8s Deployment: `helm install kafka oci://registry-1.docker.io/bitnamicharts/kafka -f kafka/values.yaml --namespace kafka --create-namespace`
+```bash
+helm upgrade --install kafka oci://registry-1.docker.io/bitnamicharts/kafka -f kafka/kafka-values.yaml --namespace kafka --create-namespace
+```
 
 *The client password is automatically generated and stored in k8s secret every time app is deployed*
+
+values are configured so that Kafka can be reached externally at `localhost:30111`. In production environments dynamic discovery or alternative dns should be used e.g. `controller.service.domain`, `broker.service.domain`
+
+Generally internal clients can reach Kafka at `kafka-controller-0.kafka-controller-headless.kafka.svc.cluster.local:9092`
+
+`clusterId` is set to a unique value to avoid conflicts in state from unique id generation across multiple deploys
 
 ## Local Development
 
@@ -95,3 +103,11 @@ kafka-console-consumer.sh \
 ## Kafka UI
 
 Deployed to the same namespace as Kafka and allows visualization of Kafka for debugging purposes. Dynamically retrieves client secret from kafka on deploy.
+
+### Install & Upgrade
+
+```bash
+helm repo add kafka-ui https://provectus.github.io/kafka-ui-charts
+helm install kafka-ui kafka-ui/kafka-ui
+helm upgrade --install kafka-ui kafka-ui/kafka-ui -f kafka/kafka-ui-values.yaml --namespace kafka --create-namespace
+```
