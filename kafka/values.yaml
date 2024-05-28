@@ -1,0 +1,14 @@
+# https://artifacthub.io/packages/helm/bitnami/kafka
+
+# Settings we will consider using in the future
+#externalAccess.enabled=true
+#externalAccess.controller.service.type=NodePort
+#externalAccess.controller.service.nodePorts[0]='node-port-1'
+#externalAccess.controller.service.nodePorts[1]='node-port-2'
+#listeners.advertisedListeners: 
+#sasl.client.users
+#sasl.client.passwords
+
+metrics.jmx.enabled: true
+zookeeper.metrics.enabled: true
+fullnameOverride: kafka
