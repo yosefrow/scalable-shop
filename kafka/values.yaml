@@ -3,11 +3,46 @@
 # Settings we will consider using in the future
 #externalAccess.enabled=true
 #externalAccess.controller.service.type=NodePort
-#externalAccess.controller.service.nodePorts[0]='node-port-1'
-#externalAccess.controller.service.nodePorts[1]='node-port-2'
 #listeners.advertisedListeners: 
 #sasl.client.users
 #sasl.client.passwords
+
+externalAccess:
+  enabled: true
+  autoDiscovery:
+    enabled: false
+  service:
+    domain: localhost
+  controller:
+    service:
+      type: NodePort
+      nodePorts:
+        - 30111
+        - 30112
+        - 30113
+      domain: localhost
+  broker:
+    service:
+      type: NodePort
+      nodePorts:
+        - 30101
+      domain: localhost
+
+kraft:
+  enabled: true
+  clusterId: q1Sh-9_ISia_zwGINzRvyQ
+
+controller:
+  replicaCount: 3
+  automountServiceAccountToken: true
+
+broker:
+  replicaCount: 1
+  automountServiceAccountToken: true
+
+service:
+  headless:
+    publishNotReadyAddresses: true
 
 metrics.jmx.enabled: true
 zookeeper.metrics.enabled: true
