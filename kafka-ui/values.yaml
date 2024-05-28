@@ -1,0 +1,24 @@
+# https://docs.kafka-ui.provectus.io/configuration/helm-charts/quick-start
+
+fullnameOverride: kafka-ui
+
+service:
+  type: NodePort
+  nodePort: 30080
+
+env:
+  - name: KAFKA_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: kafka-user-passwords
+        key: client-passwords
+  - name: KAFKA_CLUSTERS_0_NAME
+    value: local
+  - name: KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS
+    value: kafka-controller-0.kafka-controller-headless.kafka.svc.cluster.local:9092
+  - name: KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL
+    value: SASL_PLAINTEXT
+  - name: KAFKA_CLUSTERS_0_PROPERTIES_SASL_MECHANISM
+    value: PLAIN
+  - name: KAFKA_CLUSTERS_0_PROPERTIES_SASL_JAAS_CONFIG
+    value: org.apache.kafka.common.security.scram.ScramLoginModule required username="user1" password="$(KAFKA_PASSWORD)";

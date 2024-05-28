@@ -9,6 +9,8 @@ A word of warning, this Kafka deployment and configuration is meant as a PoC and
 
 K8s Deployment: `helm install kafka oci://registry-1.docker.io/bitnamicharts/kafka -f kafka/values.yaml --namespace kafka --create-namespace`
 
+*The client password is automatically generated and stored in k8s secret every time app is deployed*
+
 ## Local Development
 
 For Local Docker Kafka testing you can use [zoe](https://adevinta.github.io/zoe/) 
@@ -32,7 +34,6 @@ clusters:
       security.protocol: SASL_PLAINTEXT
       sasl.mechanism: PLAIN
       sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required username="user1" password="results_of_kubectl_get_secret";
-
 ```
 
 Example commands for zoe:
@@ -91,3 +92,6 @@ kafka-console-consumer.sh \
     --from-beginning
 ```
 
+## Kafka UI
+
+Deployed to the same namespace as Kafka and allows visualization of Kafka for debugging purposes. Dynamically retrieves client secret from kafka on deploy.
