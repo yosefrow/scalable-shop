@@ -15,7 +15,15 @@ kafkaConfig.consume('my-topic', (value) => {
 })
 
 app.get('/', (req, res) => {
-  res.send('Hello World! look at me go bobby and henry and sally!')
+  res.send({
+    '/': 'Get API Info',
+    '/healthz': 'Health check',
+    '/get-all-user-buys': 'Get Purchases for given customer'
+  })
+})
+
+app.get('/healthz', (req, res) => {
+  res.send('Success')
 })
 
 app.listen(port, () => {
