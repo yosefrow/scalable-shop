@@ -1,0 +1,16 @@
+#https://artifacthub.io/packages/helm/bitnami/mongodb
+# Warning: You should use at most a single arbiter to avoid fake elections (arbiters electing stale secondary)
+fullnameOverride: mongodb
+
+architecture: replicaset
+replicaCount: 2
+externalAccess:
+  enabled: true
+  service:
+    type: NodePort
+    nodePorts:
+      - 30711
+      - 30712
+    # domain: "localhost" # You can configure this if your host has DNS reachable from inside k8s and your host
+  autoDiscovery: 
+    enabled: false
