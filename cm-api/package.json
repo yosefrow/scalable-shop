@@ -10,8 +10,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prod": "node --env-file envs/prd.env app.js",
-    "dev": "node --env-file envs/dev.env app.js"
+    "start": "node app.js",
+    "dev": "node --env-file .env app.js"
   },
   "author": "",
   "license": "ISC",
