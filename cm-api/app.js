@@ -11,11 +11,11 @@ const jsonParser = bodyParser.json()
 const kafkaConfig = new KafkaConfig()
 const mongoDBConfig = new MongoDBClient()
 
-kafkaConfig.consume('my-topic', (value) => {
-  console.log(value)
+kafkaConfig.consume('my-topic', (msg) => {
+  console.log(msg)
+  MongoController.insertPurchase(JSON.parse(msg))
 })
 
-app.post('/insert', jsonParser, MongoController.insertPurchase)
 app.post('/find', jsonParser, MongoController.findPurchases)
 
 app.get('/', (req, res) => {

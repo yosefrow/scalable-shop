@@ -1,10 +1,10 @@
 import MongoDBClient from "./mongodb-client.js"
 
-const insertPurchase = async(req, res) => {
+const insertPurchase = async(msg) => {
     try {
         const mongoDBConfig = new MongoDBClient()
-        const {customer} = req.body
-        const {message} = req.body
+        const {customer} = msg
+        const {message} = msg
         const document = {
             customer: customer,
             message: message
@@ -12,7 +12,7 @@ const insertPurchase = async(req, res) => {
         console.log(message)
         await mongoDBConfig.insert('purchases', document)
 
-        res.status(200).json({
+        console.log({
             status: "Ok!",
             message: "Message successfully sent to MongoDB!"
         })
