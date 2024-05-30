@@ -6,5 +6,6 @@ RUN npm install --production --silent && mv node_modules ../
 COPY . .
 EXPOSE 3000
 RUN chown -R node /usr/src/app
-USER node
+# By docker history, node UID == 1000 & k8s securityContext.runAsNonRoot needs numbers)
+USER 1000
 CMD ["npm", "start"]

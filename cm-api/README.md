@@ -64,3 +64,26 @@ npm run dev
 # Test the app
 curl localhost:3000/healthz
 ```
+
+### Helm Chart
+
+Build Image for k8s Architecture with `./scripts/docker-build-and-push.sh ./cm-api yosefrow/scalable-shop-cm-api:latest`
+
+Package and Push with `scripts/helm-package-and-push.sh cm-api/helm yosefrow`
+
+## Helm Commands
+
+- *Install & Upgrade*:
+```bash
+export VERSION=0.1.0
+export KAFKA_PASSWORD="$(kubectl get secret kafka-user-passwords -n kafka -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)"
+helm upgrade --install scalable-shop-cm-api oci://registry-1.docker.io/yosefrow/scalable-shop-cm-api \
+  --version "$VERSION" --set kafka.password="$KAFKA_PASSWORD" \
+  --namespace scalable-shop --create-namespace
+```
+- *Uninstall*:
+  - `helm uninstall scalable-shop-cm-api --namespace scalable-shop`
+- *Template*
+  - `helm template $CHART`
+- *Test*
+  - `helm test scalable-shop-cm-api --namespace scalable-shop`
