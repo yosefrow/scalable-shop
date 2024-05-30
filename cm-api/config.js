@@ -15,7 +15,7 @@ class KafkaConfig {
         this.consumer = this.kafka.consumer({ groupId: 'test-group'})
     }
 
-    async produce(topic, message) {
+    async produce(topic, messages) {
         try {
         await this.producer.connect()
         await this.producer.send({
@@ -23,7 +23,7 @@ class KafkaConfig {
             messages: messages
         })
         } catch(error) {
-            console.log(error)
+            console.error(error)
         } finally {
             await this.producer.disconnect()
         }
@@ -43,7 +43,7 @@ class KafkaConfig {
                 }
             })
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
     }
 }

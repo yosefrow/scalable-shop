@@ -3,10 +3,11 @@ import KafkaConfig from "./config.js"
 const sendMessageToKafka = async (req, res) => {
     try {
         const {message} = req.body
-        const kafkaConfig = new kafkaConfig()
+        const kafkaConfig = new KafkaConfig()
         const messages = [
             { key: 'key1', value: message}
         ]
+        console.log(messages)
         kafkaConfig.produce("my-topic", messages)
 
         res.status(200).json({

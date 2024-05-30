@@ -1,5 +1,5 @@
 import express from "express";
-import bodyParser from "express";
+import bodyParser from "body-parser";
 import controller from "./controller.js";
 import KafkaConfig from "./config.js";
 
@@ -10,6 +10,7 @@ const jsonParser = bodyParser.json()
 app.post('/api/send', jsonParser, controller.sendMessageToKafka)
 
 const kafkaConfig = new KafkaConfig()
+
 kafkaConfig.consume('my-topic', (value) => {
   console.log(value)
 })
