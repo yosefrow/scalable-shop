@@ -3,7 +3,8 @@
     "body-parser": "^1.20.2",
     "express": "^4.19.2",
     "kafka": "^0.2.3",
-    "kafkajs": "^2.2.4"
+    "kafkajs": "^2.2.4",
+    "mongodb": "^6.7.0"
   },
   "name": "scalable-shop-cm-api",
   "version": "1.0.0",

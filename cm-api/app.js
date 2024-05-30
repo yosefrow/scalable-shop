@@ -1,19 +1,22 @@
 import express from "express";
 import bodyParser from "body-parser";
-import controller from "./controller.js";
-import KafkaConfig from "./config.js";
+import KafkaConfig from "./kafka-config.js";
+import MongoDBClient from "./mongodb-client.js";
+import MongoController from "./mongodb-controller.js";
 
 const app = express()
 const port = 3000
 const jsonParser = bodyParser.json()
 
-app.post('/api/send', jsonParser, controller.sendMessageToKafka)
-
 const kafkaConfig = new KafkaConfig()
+const mongoDBConfig = new MongoDBClient()
 
 kafkaConfig.consume('my-topic', (value) => {
   console.log(value)
 })
+
+app.post('/insert', jsonParser, MongoController.insertPurchase)
+app.post('/find', jsonParser, MongoController.findPurchases)
 
 app.get('/', (req, res) => {
   res.send({

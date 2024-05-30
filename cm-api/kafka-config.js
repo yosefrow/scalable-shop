@@ -11,22 +11,7 @@ class KafkaConfig {
                 password: process.env.CM_API_KAFKA_PASSWORD
             },            
         })
-        this.producer = this.kafka.producer()
         this.consumer = this.kafka.consumer({ groupId: 'test-group'})
-    }
-
-    async produce(topic, messages) {
-        try {
-        await this.producer.connect()
-        await this.producer.send({
-            topic: topic,
-            messages: messages
-        })
-        } catch(error) {
-            console.error(error)
-        } finally {
-            await this.producer.disconnect()
-        }
     }
 
     async consume(topic, callback) {
