@@ -23,8 +23,13 @@ const insertPurchase = async(msg) => {
 
 const findPurchases = async(req, res) => {
     try {
+        const path = req.path.split('/')
+        if (path.length < 3) {
+            return false
+        }
+        console.log(path)
         const mongoDBConfig = new MongoDBClient()
-        const {customer} = req.body
+        const customer = path[2]
         const query = {
             customer: customer
         }

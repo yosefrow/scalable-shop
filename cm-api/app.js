@@ -16,13 +16,13 @@ kafkaConfig.consume('my-topic', (msg) => {
   MongoController.insertPurchase(JSON.parse(msg))
 })
 
-app.post('/find', jsonParser, MongoController.findPurchases)
+app.get('/get-all-user-buys/*', jsonParser, MongoController.findPurchases)
 
 app.get('/', (req, res) => {
   res.send({
     '/': 'Get API Info',
     '/healthz': 'Health check',
-    '/get-all-user-buys': 'Get Purchases for given customer'
+    '/get-all-user-buys/{user}': 'Get Purchases for given customer'
   })
 })
 
