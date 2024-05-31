@@ -153,7 +153,7 @@ export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace mongodb mongodb -o
 kubectl run --namespace mongodb mongodb-client --rm --tty -i --restart='Never' --env="MONGODB_ROOT_PASSWORD=$MONGODB_ROOT_PASSWORD" --image docker.io/bitnami/mongodb:7.0.11-debian-12-r0 --command -- bash
 
 # Connect dynamically to the replicaset
-mongosh admin --host "mongodb-0.mongodb-headless.mongodb.svc.cluster.local:27017,mongodb-1.mongodb-headless.mongodb.svc.cluster.local:27017" --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD
+mongosh admin --host "mongodb-0.mongodb-headless.mongodb,mongodb-1.mongodb-headless.mongodb" --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD
 ```
 
 ### Arbiter Usage
