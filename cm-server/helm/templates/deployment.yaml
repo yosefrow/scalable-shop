@@ -34,10 +34,10 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           {{ with (.Values.kafka) -}}
           env:
-            - name: CM_API_KAFKA_USERNAME
+            - name: KAFKA_USERNAME
               value: {{ .username }}
-            - name: CM_API_KAFKA_PASSWORD
+            - name: KAFKA_PASSWORD
               value: {{ .password }}
-            - name: CM_API_KAFKA_BROKERS
+            - name: KAFKA_BROKERS
               value: {{ .brokers }}
           {{- end }}  
