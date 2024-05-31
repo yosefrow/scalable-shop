@@ -12,14 +12,16 @@ class KafkaConfig {
                 password: process.env.CM_API_KAFKA_PASSWORD
             },            
         })
-        this.consumer = this.kafka.consumer({ groupId: process.env.CM_API_KAFKA_GROUPID})
+        this.topic    = process.env.CM_API_KAFKA_TOPIC || 'scalable-shop-purchases'
+        const groupId = process.env.CM_API_KAFKA_GROUPID || 'scalable-shop'
+        this.consumer = this.kafka.consumer({ groupId: groupId})
     }
 
-    async consume(topic, callback) {
+    async consume(callback) {
         try {
             await this.consumer.connect()
             await this.consumer.subscribe({
-                topic: topic,
+                topic: this.topic,
                 fromBeginning: true
             })
             await this.consumer.run({
