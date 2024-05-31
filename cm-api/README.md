@@ -34,7 +34,6 @@
   - returns information about the api
 - /healthz
   - returns 200, "Success" when successful
-  - returns 503, "Service Unavailable" when healthcheck fails
 - /buyList/{user}
   - GET route - Return purchases for given user
 
