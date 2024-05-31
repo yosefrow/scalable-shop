@@ -52,3 +52,18 @@ export VERSION=0.1.0; helm upgrade --install scalable-shop-cm-api oci://registry
   --set mongodb.password="$MONGODB_ROOT_PASSWORD" \
   --namespace scalable-shop --create-namespace
 ```
+
+## Customer Managmement API (cm-server)
+
+cm-server is installed and configured with helm. See [cm-api/README.md](cm-server/README.md) for more info.
+
+### Install & Upgrade
+
+```bash
+export KAFKA_PASSWORD="$(kubectl get secret kafka-user-passwords -n kafka -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)"
+
+export VERSION=0.1.0; helm upgrade --install scalable-shop-cm-server oci://registry-1.docker.io/yosefrow/scalable-shop-cm-server \
+  --version "$VERSION" \
+  --set kafka.password="$KAFKA_PASSWORD" \
+  --namespace scalable-shop --create-namespace
+```
