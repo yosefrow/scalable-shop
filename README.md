@@ -35,3 +35,20 @@ MongoDB is installed and configured with helm using PSA configuration. See [mong
 ```bash
 helm upgrade --install mongodb oci://registry-1.docker.io/bitnamicharts/mongodb -f mongodb/values.yaml --namespace mongodb --create-namespace 
 ```
+
+## Customer Managmement API (cm-api)
+
+cm-api is installed and configured with helm. See [cm-api/README.md](cm-api/README.md) for more info.
+
+### Install & Upgrade
+
+```bash
+export KAFKA_PASSWORD="$(kubectl get secret kafka-user-passwords -n kafka -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)"
+export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace mongodb mongodb -o jsonpath="{.data.mongodb-root-password}" | base64 -d)
+
+export VERSION=0.1.0; helm upgrade --install scalable-shop-cm-api oci://registry-1.docker.io/yosefrow/scalable-shop-cm-api \
+  --version "$VERSION" \
+  --set kafka.password="$KAFKA_PASSWORD" \
+  --set mongodb.password="$MONGODB_ROOT_PASSWORD" \
+  --namespace scalable-shop --create-namespace
+```
