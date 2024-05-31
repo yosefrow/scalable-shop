@@ -35,11 +35,11 @@ spec:
           env:
           {{ with (.Values.kafka) -}}
           env:
-            - name: CM_API_KAFKA_USERNAME
+            - name: KAFKA_USERNAME
               value: {{ .username }}
-            - name: CM_API_KAFKA_PASSWORD
+            - name: KAFKA_PASSWORD
               value: {{ .password }}
-            - name: CM_API_KAFKA_BROKERS
+            - name: KAFKA_BROKERS
               value: {{ .brokers }}
           {{- end -}}  
           {{- with (.Values.mongodb) }}
@@ -51,6 +51,6 @@ spec:
               value: {{ .authdb }}
             - name: MONGODB_HOSTS
               value: {{ .hosts }}
-            - name: CM_API_MONGODB_URI
+            - name: MONGODB_URI
               value: {{ .uri }}
           {{- end }}   

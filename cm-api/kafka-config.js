@@ -4,16 +4,16 @@ class KafkaConfig {
     constructor() {
         this.kafka = new Kafka({
             clientId: "nodejs-kafka",
-            brokers: [process.env.CM_API_KAFKA_BROKERS],
+            brokers: [process.env.KAFKA_BROKERS],
             ssl: false,
             sasl: {
                 mechanism: 'plain', // scram-sha-256 or scram-sha-512
-                username: process.env.CM_API_KAFKA_USERNAME,
-                password: process.env.CM_API_KAFKA_PASSWORD
+                username: process.env.KAFKA_USERNAME,
+                password: process.env.KAFKA_PASSWORD
             },            
         })
-        this.topic    = process.env.CM_API_KAFKA_TOPIC || 'scalable-shop-purchases'
-        const groupId = process.env.CM_API_KAFKA_GROUPID || 'scalable-shop'
+        this.topic    = process.env.KAFKA_TOPIC || 'scalable-shop-purchases'
+        const groupId = process.env.KAFKA_GROUPID || 'scalable-shop'
         this.consumer = this.kafka.consumer({ groupId: groupId})
     }
 
