@@ -9,15 +9,16 @@ class MongoDBClient {
     }
 
     this.client = new MongoClient(process.env.CM_API_MONGODB_URI, config);
-    this.dbName = 'scalable-shop'
+    this.collectionName = process.env.CM_API_MONGODB_DB || 'scalable-shop'
+    this.dbName = process.env.CM_API_MONGODB_COLLECTION || 'purchases'
   }
 
-  async find(collectionName, query) {
+  async find(query) {
     try {
       // Query for a movie that has the title 'Back to the Future'
       await this.client.connect()
       const db = this.client.db(this.dbName);     
-      const collection = db.collection(collectionName);
+      const collection = db.collection(this.collectionName);
       console.log(query)
       const result = await collection.find(query).toArray()
       return result
@@ -27,11 +28,11 @@ class MongoDBClient {
     }
   }
 
-  async insert(collectionName, document) {
+  async insert(document) {
     try {
       await this.client.connect()
       const db = this.client.db(this.dbName);     
-      const collection = db.collection(collectionName);
+      const collection = db.collection(this.collectionName);
 
       // Insert the defined document into the collection
       const result = await collection.insertOne(document);

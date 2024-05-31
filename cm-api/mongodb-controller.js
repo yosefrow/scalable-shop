@@ -10,7 +10,7 @@ const insertPurchase = async(msg) => {
             message: message
         }
         console.log(message)
-        await mongoDBConfig.insert('purchases', document)
+        await mongoDBConfig.insert(document)
 
         console.log({
             status: "Ok!",
@@ -34,7 +34,7 @@ const findPurchases = async(req, res) => {
             user: user
         }
         console.log(user)
-        const purchases = await mongoDBConfig.find('purchases', query)
+        const purchases = await mongoDBConfig.find(query)
         console.log("Purchases", purchases)
         res.status(200).json({
             status: "Ok!",
