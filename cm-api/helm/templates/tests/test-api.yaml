@@ -11,7 +11,7 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "chart.fullname" . }}:{{ .Values.service.port }}/get-all-user-buys']
+      args: ['{{ include "chart.fullname" . }}:{{ .Values.service.port }}/buyList/foo']
       resources:
         {{- toYaml .Values.resources | nindent 8 }}
   restartPolicy: Never
