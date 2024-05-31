@@ -10,6 +10,7 @@ For example TLS is generally not provisioned for DB connections in this project.
 ## Kafka
 
 Kafka and Kafka UI are installed and configured with helm using 3 controller and one broker configuration for KRaft. See [kafka/README.md](kafka/README.md) for more info.
+Strimzi was considered as a possible solution for kafka, but in this case the bitnami chart is good enough for the task.
 
 ### Kafka Install & Upgrade
 
