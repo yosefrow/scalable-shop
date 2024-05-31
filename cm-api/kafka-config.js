@@ -1,4 +1,5 @@
-import {Kafka} from "kafkajs";
+import {Kafka} from "kafkajs"
+
 class KafkaConfig {
     constructor() {
         this.kafka = new Kafka({
@@ -11,7 +12,7 @@ class KafkaConfig {
                 password: process.env.CM_API_KAFKA_PASSWORD
             },            
         })
-        this.consumer = this.kafka.consumer({ groupId: 'test-group'})
+        this.consumer = this.kafka.consumer({ groupId: process.env.CM_API_KAFKA_GROUPID})
     }
 
     async consume(topic, callback) {

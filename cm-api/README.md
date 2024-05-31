@@ -35,8 +35,8 @@
 - /healthz
   - returns 200, "Success" when successful
   - returns 503, "Service Unavailable" when healthcheck fails
-- /get-all-user-buys/{customer}
-  - GET route - Return all customer purchases
+- /buyList/{user}
+  - GET route - Return purchases for given user
 
 ## Considerations
 
