@@ -29,7 +29,7 @@ Generally internal clients can reach Kafka at `kafka-controller-0.kafka-controll
 
 For Local Docker Kafka testing you can use [zoe](https://adevinta.github.io/zoe/) 
 
-Get deployed Helm Chart password with `kubectl get secret kafka-user-passwords --namespace kafka -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1"`
+Get deployed Helm Chart password with `kubectl get secret kafka-user-passwords --namespace kafka -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1`
 
 ~/.zoe/config/default.yaml 
 

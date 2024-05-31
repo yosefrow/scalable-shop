@@ -1,0 +1,13 @@
+services:
+  scalable-shop-cm-api:
+    image: scalable-shop-cm-api
+    build:
+      context: ./cm-api
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+    env_file:
+      - ./cm-api/.env
+    ports:
+      - 3030:3000
+    network_mode: host
