@@ -1,0 +1,54 @@
+# Default values for chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 3
+
+image:
+  repository: yosefrow/scalable-shop-cm-api
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+nameOverride: ""
+fullnameOverride: "scalable-shop-cm-api"
+
+securityContext:
+  runAsNonRoot: true
+
+service:
+  type: NodePort
+  nodePort: 30030
+  port: 3000
+
+resources:
+  requests:
+    cpu: "0.5"
+    memory: "250M"
+  limits:
+    cpu: "1"
+    memory: "500M"
+
+startupProbe:
+  httpGet:
+    path: /healthz
+    port: 3000
+  failureThreshold: 30
+  periodSeconds: 10
+readinessProbe:
+  httpGet:
+    path: /healthz
+    port: 3000
+  failureThreshold: 1
+  periodSeconds: 35
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: 5000
+  failureThreshold: 5
+  periodSeconds: 30
+
+kafka:
+  username: user1
+  password: mypass
+  brokers: kafka-controller-0.kafka-controller-headless.kafka:9092
