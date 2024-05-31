@@ -3,14 +3,20 @@ import MongoDBClient from "./mongodb-client.js"
 const insertPurchase = async(msg) => {
     try {
         const mongoDBConfig = new MongoDBClient()
-        const {user} = msg
-        const {message} = msg
-        const document = {
-            user: user,
-            message: message
+        const {username} = msg
+        const {userid} = msg
+        const {price} = msg
+        const {timestamp} = msg
+
+        const purchase = {
+            username: username,
+            userid: userid,
+            price: price,
+            timestamp: timestamp
         }
-        console.log(message)
-        await mongoDBConfig.insert(document)
+
+        console.log(purchase)
+        await mongoDBConfig.insert(purchase)
 
         console.log({
             status: "Ok!",
@@ -29,11 +35,11 @@ const findPurchases = async(req, res) => {
         }
         console.log(path)
         const mongoDBConfig = new MongoDBClient()
-        const user = path[2]
+        const username = path[2]
         const query = {
-            user: user
+            username: username
         }
-        console.log(user)
+        console.log(username)
         const purchases = await mongoDBConfig.find(query)
         console.log("Purchases", purchases)
         res.status(200).json({
@@ -48,3 +54,4 @@ const findPurchases = async(req, res) => {
 const controllers = { insertPurchase, findPurchases }
 
 export default controllers
+

@@ -4,30 +4,19 @@
 
 1.  Method: Get all customer purchases - for specific customer (userid)
     1.  Query mongoDB for list of all customer purchases
-    2.  Read purchase from MongoDB by userid
-    3.  Originally looks like we want a list of purchases only but based on ui task, looks like we care about purchases for our user only so maybe we should consider storing requests by user ……**.but this kind of feels wrong. The data type is purchases. Maybe we can associate purchases to a user by id somehow 💡**
-    4.  **Example**
-        1.  **User:**
-            1.  **Id**
-            2.  **Name**
-            3.  **Purchases(ids)**
-        2.  **Purchase:** 
-            1.  **Userid:**
-            2.  **Userid.username**
-            3.  **Price,**
-            4.  **timestamp**
-2.  Method: Store data in MongoDB
-    1.  Write purchase data into MongoDB
-3.  Main Loop: Kafka Consumer
+    2.  Read purchase from MongoDB by username
+    3.  Each purchase consists of the following fields
+        1.  **username:**
+        2.  **userid**
+        3.  **price**
+        4.  **timestamp**
+   
+2.  Main Loop: Kafka Consumer
     1.  Watch for and consume messages from Kafka
         1.  Messages contain “buy” request data object
             1.  username, userid, price, timestamp
-        2.  Calls Store data in MongoDB Method
-
-## config.js
-
-## controller.js
-
+        2.  Calls method to insert data into MongoDB
+   
 ## API Definition
 
 - /
@@ -37,7 +26,29 @@
 - /buyList/{user}
   - GET route - Return purchases for given user
 
+## kafka-config.js
+
+Initialize kafka consumer configuration as an importable module.
+Provide method to consume for kafka-controller
+
+## mongodb-config.js
+
+Initialize mongodb client as an importable module.
+Provide method to find and insert for mongodb-controller
+
+## mongodb-controller.js
+
+include mongodb-config module and use it to get mongodb methods and configurations
+provided to app.js
+
+## mongodb
+
 ## Considerations
+
+1. we did not overly generalize controllers (it can only either consume or produce depending on the service)
+2. caching and more unique message lookup scenarios were not part of the design
+3. It might be better to store users in a separate collection with userid and username and then lookup userid or username with whichever we use at the user key
+4. Additionally we can consider a design where we add purchase ids and update a users list of purchase ids, so it isn't needed to find which purchases are associated with a user every time.
 
 ## Local Development
 
@@ -53,10 +64,11 @@ test with: `curl localhost:3030/healthz`
 You can also perform a more basic test using flask on your host machine
 
 ```bash
-# Setup dev config and configure it
+# Setup dev config from repo root dir and configure it
 cp .env.example .env
 
 # Install and Run th app
+cd cm-api
 npm install
 npm run dev
 

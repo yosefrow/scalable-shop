@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
   res.send({
     '/': 'Get API Info',
     '/healthz': 'Health check',
-    '/buyList/{user}': 'Get Purchases for given user'
+    '/buyList/{username}': 'Get Purchases for given username'
   })
 })
 
