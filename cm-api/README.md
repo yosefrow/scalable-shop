@@ -31,7 +31,7 @@
 Initialize kafka consumer configuration as an importable module.
 Provide method to consume for kafka-controller
 
-## mongodb-config.js
+## mongodb-client.js
 
 Initialize mongodb client as an importable module.
 Provide method to find and insert for mongodb-controller
@@ -41,7 +41,7 @@ Provide method to find and insert for mongodb-controller
 include mongodb-config module and use it to get mongodb methods and configurations
 provided to app.js
 
-## mongodb
+*When kafka messages are forwarded to mongo, only valid fields are extracted from the message*
 
 ## Considerations
 
@@ -86,12 +86,10 @@ Package and Push with `scripts/helm-package-and-push.sh cm-api/helm yosefrow`
 
 - *Install & Upgrade*:
 ```bash
-export VERSION=0.1.0
 export KAFKA_PASSWORD="$(kubectl get secret kafka-user-passwords -n kafka -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)"
 export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace mongodb mongodb -o jsonpath="{.data.mongodb-root-password}" | base64 -d)
 
-
-helm upgrade --install scalable-shop-cm-api oci://registry-1.docker.io/yosefrow/scalable-shop-cm-api \
+export VERSION=0.1.0; helm upgrade --install scalable-shop-cm-api oci://registry-1.docker.io/yosefrow/scalable-shop-cm-api \
   --version "$VERSION" \
   --set kafka.password="$KAFKA_PASSWORD" \
   --set mongodb.password="$MONGODB_ROOT_PASSWORD" \
