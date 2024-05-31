@@ -50,5 +50,12 @@ livenessProbe:
 
 kafka:
   username: user1
-  password: mypass
+  password: my-pass
   brokers: kafka-controller-0.kafka-controller-headless.kafka:9092
+
+mongodb:
+  username: root
+  password: my-pass
+  authdb: admin
+  hosts: mongodb-0.mongodb-headless.mongodb,mongodb-1.mongodb-headless.mongodb
+  uri: mongodb://$(MONGODB_USERNAME):$(MONGODB_PASSWORD)@$(MONGODB_HOSTS)/$(MONGODB_AUTHDB)

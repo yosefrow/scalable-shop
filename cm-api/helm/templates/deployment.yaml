@@ -32,6 +32,7 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          env:
           {{ with (.Values.kafka) -}}
           env:
             - name: CM_API_KAFKA_USERNAME
@@ -40,4 +41,16 @@ spec:
               value: {{ .password }}
             - name: CM_API_KAFKA_BROKERS
               value: {{ .brokers }}
-          {{- end }}  
+          {{- end -}}  
+          {{- with (.Values.mongodb) }}
+            - name: MONGODB_USERNAME
+              value: {{ .username }}
+            - name: MONGODB_PASSWORD
+              value: {{ .password }}
+            - name: MONGODB_AUTHDB
+              value: {{ .authdb }}
+            - name: MONGODB_HOSTS
+              value: {{ .hosts }}
+            - name: CM_API_MONGODB_URI
+              value: {{ .uri }}
+          {{- end }}   

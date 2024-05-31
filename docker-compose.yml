@@ -7,7 +7,7 @@ services:
     environment:
       NODE_ENV: production
     env_file:
-      - ./cm-api/.env
+      - .env
     ports:
       - 3030:3000
     network_mode: host
