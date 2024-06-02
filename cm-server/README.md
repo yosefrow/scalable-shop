@@ -78,7 +78,6 @@ export KAFKA_PASSWORD="$(kubectl get secret kafka-user-passwords -n kafka -o jso
 export VERSION=0.1.0; helm upgrade --install scalable-shop-cm-server oci://registry-1.docker.io/yosefrow/scalable-shop-cm-server \
   --version "$VERSION" \
   --set kafka.password="$KAFKA_PASSWORD" \
-  --set mongodb.password="$MONGODB_ROOT_PASSWORD" \
   --namespace scalable-shop --create-namespace
 ```
 

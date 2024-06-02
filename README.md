@@ -16,6 +16,7 @@ Additionally, every request and attached data submitted from the client-side sho
 2. Caching and more unique message lookup scenarios were not part of the design
 3. It is probably better to store users in a separate collection with userid and username and then lookup username by userid for example
 4. We can also consider a design where we consistently update a user's list of purchase ids, so we don't need to find which purchases are associated with a user every time.
+5. Currently logs are verbose by default and no logging controller is used. Generally Different log levels should be set with varying levels of verbosity and use low level of verbosity in production by default to avoid log spam
 
 ## Kafka & Kafka UI
 
@@ -33,6 +34,17 @@ Strimzi was considered as a possible solution for kafka, but in this case the bi
 MongoDB is installed and configured with helm using PSA configuration. See [mongodb/README.md](mongodb/README.md) for more info.
 
 - [Install & Upgrade](mongodb/README.md#install--upgrade)
+
+## ingress-nginx
+
+Install Ingress-Nginx to handle external requests to cm-server
+
+```bash
+helm repo add nginx-stable https://helm.nginx.com/stable
+helm repo update
+helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
+helm show values ingress-nginx --repo https://kubernetes.github.io/ingress-nginx
+```
 
 ## Customer Management API (cm-api)
 

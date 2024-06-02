@@ -54,3 +54,18 @@ kafka:
   brokers: kafka-controller-0.kafka-controller-headless.kafka:9092
 cmApi:
   host: scalable-shop-cm-api:3000
+
+# The app expects to receive naked paths like /healthz
+# So ingress implementations should respect that 
+# ${FULL_NAME} is replaced with the name of the service
+# e.g. scalable-shop-cm-server
+ingress:
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  hosts:
+    - host: localhost
+      paths:
+        - path: /${FULL_NAME}(/|$)(.*)
+          pathType: ImplementationSpecific
