@@ -30,7 +30,7 @@ const getAllUserBuys = async(req, res) => {
         })
         .then(data => {
           console.log('Data received:', data);
-          const purchases = data
+          const {purchases} = data
           console.log("Purchases", purchases)
           res.status(200).json({
               username: username,
