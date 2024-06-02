@@ -8,7 +8,7 @@
     "url": "^0.11.3"
   },
   "name": "scalable-shop-cm-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "customer-management api for scalable-shop. Provide an API and consume events from Kafka",
   "main": "app.js",
   "scripts": {

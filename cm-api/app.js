@@ -9,7 +9,6 @@ const jsonParser = bodyParser.json()
 
 const kafkaConfig = new KafkaConfig()
 
-const kafkaTopic = process.env.KAFKA_TOPIC || 'scalable-shop-purchases'
 kafkaConfig.consume((msg) => {
   console.log(msg)
   MongoController.insertPurchase(JSON.parse(msg))
