@@ -44,7 +44,7 @@ readinessProbe:
 livenessProbe:
   httpGet:
     path: /healthz
-    port: 5000
+    port: 3000
   failureThreshold: 5
   periodSeconds: 30
 

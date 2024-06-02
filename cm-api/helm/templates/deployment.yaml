@@ -33,8 +33,7 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-          {{ with (.Values.kafka) -}}
-          env:
+          {{- with (.Values.kafka) }}
             - name: KAFKA_USERNAME
               value: {{ .username }}
             - name: KAFKA_PASSWORD

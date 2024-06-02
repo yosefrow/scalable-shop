@@ -1,35 +1,42 @@
 # Customer Management API
 
-## app.js
+Customer-Management API for scalable-shop
 
-1.  Method: Get all customer purchases - for specific customer (userid)
-    1.  Query mongoDB for list of all customer purchases
-    2.  Read purchase from MongoDB by username
-    3.  Each purchase consists of the following fields
-        1.  **username:**
-        2.  **userid**
-        3.  **price**
-        4.  **timestamp**
-   
-2.  Main Loop: Kafka Consumer
-    1.  Watch for and consume messages from Kafka
-        1.  Messages contain “buy” request data object
-            1.  username, userid, price, timestamp
-        2.  Calls method to insert data into MongoDB
-   
+1. Provide an API that's queried by customer-management server 
+2. Consume events from Kafka that were produced by cm-server service
+
+## Data structures
+
+1.  Each purchase consists of the following fields
+    1.  **username:**: name of the user purchasing
+    2.  **userid**: id of the user purchasing
+    3.  **price**: price of the item
+    4.  **timestamp**: when the purchase was received
+
 ## API Definition
 
 - /
-  - returns information about the api
+  - returns information about the API
 - /healthz
   - returns 200, "Success" when successful
 - /buyList/{user}
   - GET route - Return purchases for given user
 
+## app.js
+
+1.  Method: Get all customer purchases for specific customer (username)
+    1.  Query mongoDB for list of all customer purchases
+    2.  Read purchase from MongoDB by username
+
+2.  Main Loop: Kafka Consumer
+    1.  Watch for and consume messages from Kafka
+        1.  Messages contain purchases that were posted to /buy in cm-server
+        2.  Calls method to insert data into MongoDB
+
 ## kafka-config.js
 
 Initialize kafka consumer configuration as an importable module.
-Provide method to consume for kafka-controller
+Provide method to consume from Kafka provided to app.js
 
 ## mongodb-client.js
 
@@ -42,6 +49,7 @@ include mongodb-config module and use it to get mongodb methods and configuratio
 provided to app.js
 
 *When kafka messages are forwarded to mongo, only valid fields are extracted from the message*
+
 
 ## Considerations
 
