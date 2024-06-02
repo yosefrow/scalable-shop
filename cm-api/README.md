@@ -11,7 +11,7 @@ Customer-Management API for scalable-shop
     1.  **username:**: name of the user purchasing
     2.  **userid**: id of the user purchasing
     3.  **price**: price of the item
-    4.  **timestamp**: when the purchase was received
+    4.  **timestamp**: when the purchase was sent
 
 ## API Definition
 

@@ -11,7 +11,7 @@ Customer-Management Server for scalable-shop
     1.  **username:**: name of the user purchasing
     2.  **userid**: id of the user purchasing
     3.  **price**: price of the item
-    4.  **timestamp**: when the purchase was received
+    4.  **timestamp**: when the purchase was sent
 
 ## API Definition
 
@@ -26,10 +26,9 @@ Customer-Management Server for scalable-shop
 
 ## app.js
 
-1.  Method: Get all customer purchases for specific customer (username)
-    1.  Query cm-api service with username
-    2.  Return results to the frontend
-
+1. Call method from kafka-controller to produce messages
+2. Call method from api-controller to get user purchases
+3. Expose endpoints to frontend application
 
 ## kafka-config.js
 
