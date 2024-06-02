@@ -1,6 +1,3 @@
-import http from 'http'
-import { env } from 'process'
-
 const getAllUserBuys = async(req, res) => {
     try {
         const path = req.path.split('/')
