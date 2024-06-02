@@ -44,6 +44,7 @@ service:
   headless:
     publishNotReadyAddresses: true
 
-metrics.jmx.enabled: true
-zookeeper.metrics.enabled: true
-fullnameOverride: kafka
+## Prometheus JMX exporter: exposes the majority of Kafka metrics
+metrics:
+  jmx:
+    enabled: true
