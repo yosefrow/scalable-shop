@@ -4,8 +4,8 @@ Shop that is designed to be scalable.
 
 **Please make sure to read the important sections at the end of the page**
 
-- Assumptions, Understandings, and Notes
-- Production Considerations
+- [Assumptions, Understandings, and Notes](#assumptions-understandings-and-notes)
+- [Production Considerations](#production-considerations)
 
 ## General Flows
 
