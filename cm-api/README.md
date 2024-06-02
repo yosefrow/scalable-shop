@@ -1,4 +1,4 @@
-# Customer Management API
+# Customer Management API (cm-api)
 
 Customer-Management API for scalable-shop
 
@@ -50,13 +50,6 @@ provided to app.js
 
 *When kafka messages are forwarded to mongo, only valid fields are extracted from the message*
 
-## Considerations
-
-1. we did not overly generalize controllers (it can only either consume or produce depending on the service)
-2. caching and more unique message lookup scenarios were not part of the design
-3. It might be better to store users in a separate collection with userid and username and then lookup userid or username with whichever we use at the user key
-4. Additionally we can consider a design where we add purchase ids and update a users list of purchase ids, so it isn't needed to find which purchases are associated with a user every time.
-
 ## Local Development
 
 ### Docker Environment
@@ -89,9 +82,8 @@ Build Image for k8s Architecture with `./scripts/docker-build-and-push.sh ./cm-a
 
 Package and Push with `scripts/helm-package-and-push.sh cm-api/helm yosefrow`
 
-## Helm Commands
+## Install & Upgrade
 
-- *Install & Upgrade*:
 ```bash
 export KAFKA_PASSWORD="$(kubectl get secret kafka-user-passwords -n kafka -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)"
 export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace mongodb mongodb -o jsonpath="{.data.mongodb-root-password}" | base64 -d)
@@ -102,6 +94,8 @@ export VERSION=0.1.0; helm upgrade --install scalable-shop-cm-api oci://registry
   --set mongodb.password="$MONGODB_ROOT_PASSWORD" \
   --namespace scalable-shop --create-namespace
 ```
+## Other Helm Commands
+
 - *Uninstall*:
   - `helm uninstall scalable-shop-cm-api --namespace scalable-shop`
 - *Template*

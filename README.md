@@ -1,69 +1,57 @@
-# scalable-shop
+# Scalable Shop
+
 Shop that is designed to be scalable
 
-### A General word about Security and Availability
+## A General word about Security and Availability
 
-While efforts are made to use decent security and availability standards, due to the nature of this project being a PoC, you should definitely not use this project as-is in production because some things will definitely be missing.
+While efforts are made to use some security and availability standards, due to the nature of this project being a PoC, you should definitely not use this project as-is in production because some things will definitely be missing.
 
 For example TLS is generally not provisioned for DB connections in this project. In general, in a production environment all components should connect securely using methods that include but are not limited to API Authentication, TLS encryption for in-transit traffic, creating dedicated non-root users, or using IAM based authentication.
 
-## Kafka
+Additionally, every request and attached data submitted from the client-side should be validated to prevent various cyber attacks.
 
-Kafka and Kafka UI are installed and configured with helm using 3 controller and one broker configuration for KRaft. See [kafka/README.md](kafka/README.md) for more info.
-Strimzi was considered as a possible solution for kafka, but in this case the bitnami chart is good enough for the task.
+## Additional Considerations
 
-### Kafka Install & Upgrade
+1. We did not overly generalize controllers (it can only either consume or produce depending on the service)
+2. Caching and more unique message lookup scenarios were not part of the design
+3. It is probably better to store users in a separate collection with userid and username and then lookup username by userid for example
+4. We can also consider a design where we consistently update a user's list of purchase ids, so we don't need to find which purchases are associated with a user every time.
 
-```bash
-helm upgrade --install kafka oci://registry-1.docker.io/bitnamicharts/kafka -f kafka/kafka-values.yaml --namespace kafka --create-namespace
-```
+## Kafka & Kafka UI
 
-### Kafka UI Install & Upgrade
+Kafka and Kafka UI are installed and configured with helm using 3 controllers and one broker configuration for KRaft. See [kafka/README.md](kafka/README.md) for more info.
 
-```bash
-helm repo add kafka-ui https://provectus.github.io/kafka-ui-charts
-helm install kafka-ui kafka-ui/kafka-ui
-helm upgrade --install kafka-ui kafka-ui/kafka-ui -f kafka/kafka-ui-values.yaml --namespace kafka --create-namespace
-```
+- [Install & Upgrade](kafka/README.md#install--upgrade)
+- [Install & Upgrade UI](kafka/README.md#install--upgrade-1)
+
+### Notes
+
+Strimzi was considered as a possible solution for kafka, but in this case the bitnami chart was good enough for the task.
 
 ## MongoDB
 
 MongoDB is installed and configured with helm using PSA configuration. See [mongodb/README.md](mongodb/README.md) for more info.
 
-### Install & Upgrade
-
-```bash
-helm upgrade --install mongodb oci://registry-1.docker.io/bitnamicharts/mongodb -f mongodb/values.yaml --namespace mongodb --create-namespace 
-```
+- [Install & Upgrade](mongodb/README.md#install--upgrade)
 
 ## Customer Management API (cm-api)
 
+Customer-Management API for scalable-shop
+
+1. Provide an API that's queried by customer-management server 
+2. Consume events from Kafka that were produced by cm-server service
+
 cm-api is installed and configured with helm. See [cm-api/README.md](cm-api/README.md) for more info.
 
-### Install & Upgrade
+- [Install & Upgrade](cm-api/README.md#install--upgrade)
 
-```bash
-export KAFKA_PASSWORD="$(kubectl get secret kafka-user-passwords -n kafka -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)"
-export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace mongodb mongodb -o jsonpath="{.data.mongodb-root-password}" | base64 -d)
+## Customer Management Server (cm-server)
 
-export VERSION=0.1.0; helm upgrade --install scalable-shop-cm-api oci://registry-1.docker.io/yosefrow/scalable-shop-cm-api \
-  --version "$VERSION" \
-  --set kafka.password="$KAFKA_PASSWORD" \
-  --set mongodb.password="$MONGODB_ROOT_PASSWORD" \
-  --namespace scalable-shop --create-namespace
-```
+Customer-Management Server for scalable-shop
 
-## Customer Management API (cm-server)
+1. Provide Endpoints that are accessed by the customer frontend
+2. Produce events for Kafka based on buy data sent via the customer frontend that are consumed by the cm-api service
 
 cm-server is installed and configured with helm. See [cm-api/README.md](cm-server/README.md) for more info.
 
-### Install & Upgrade
-
-```bash
-export KAFKA_PASSWORD="$(kubectl get secret kafka-user-passwords -n kafka -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)"
-
-export VERSION=0.1.0; helm upgrade --install scalable-shop-cm-server oci://registry-1.docker.io/yosefrow/scalable-shop-cm-server \
-  --version "$VERSION" \
-  --set kafka.password="$KAFKA_PASSWORD" \
-  --namespace scalable-shop --create-namespace
-```
+- [Install & Upgrade](cm-server/README.md#install--upgrade)
