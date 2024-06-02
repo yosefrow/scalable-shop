@@ -8,9 +8,9 @@ class MongoDBClient {
       serverSelectionTimeoutMS: 5000
     }
 
-    this.client = new MongoClient(process.env.CM_API_MONGODB_URI, config);
-    this.collectionName = process.env.CM_API_MONGODB_DB || 'scalable-shop'
-    this.dbName = process.env.CM_API_MONGODB_COLLECTION || 'purchases'
+    this.client = new MongoClient(process.env.MONGODB_URI, config);
+    this.collectionName = process.env.MONGODB_DB || 'scalable-shop'
+    this.dbName = process.env.MONGODB_COLLECTION || 'purchases'
   }
 
   async find(query) {

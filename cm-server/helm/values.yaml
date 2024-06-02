@@ -5,21 +5,21 @@
 replicaCount: 3
 
 image:
-  repository: yosefrow/scalable-shop-cm-api
+  repository: yosefrow/scalable-shop-cm-server
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
 nameOverride: ""
-fullnameOverride: "scalable-shop-cm-api"
+fullnameOverride: "scalable-shop-cm-server"
 
 securityContext:
   runAsNonRoot: true
 
 service:
   type: NodePort
-  nodePort: 30030
-  port: 3000
+  nodePort: 30031
+  port: 3001
 
 resources:
   requests:
@@ -32,19 +32,19 @@ resources:
 startupProbe:
   httpGet:
     path: /healthz
-    port: 3000
+    port: 3001
   failureThreshold: 30
   periodSeconds: 10
 readinessProbe:
   httpGet:
     path: /healthz
-    port: 3000
+    port: 3001
   failureThreshold: 1
   periodSeconds: 35
 livenessProbe:
   httpGet:
     path: /healthz
-    port: 3000
+    port: 3001
   failureThreshold: 5
   periodSeconds: 30
 
@@ -52,10 +52,20 @@ kafka:
   username: user1
   password: my-pass
   brokers: kafka-controller-0.kafka-controller-headless.kafka:9092
+cmApi:
+  host: scalable-shop-cm-api:3000
 
-mongodb:
-  username: root
-  password: my-pass
-  authdb: admin
-  hosts: mongodb-0.mongodb-headless.mongodb,mongodb-1.mongodb-headless.mongodb
-  uri: mongodb://$(MONGODB_USERNAME):$(MONGODB_PASSWORD)@$(MONGODB_HOSTS)/$(MONGODB_AUTHDB)
+# The app expects to receive naked paths like /healthz
+# So ingress implementations should respect that 
+# ${FULL_NAME} is replaced with the name of the service
+# e.g. scalable-shop-cm-server
+ingress:
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  hosts:
+    - host: localhost
+      paths:
+        - path: /${FULL_NAME}(/|$)(.*)
+          pathType: ImplementationSpecific

@@ -14,24 +14,20 @@ class KafkaConfig {
         })
         this.topic    = process.env.KAFKA_TOPIC || 'scalable-shop-purchases'
         const groupId = process.env.KAFKA_GROUPID || 'scalable-shop'
-        this.consumer = this.kafka.consumer({ groupId: groupId})
+        this.producer = this.kafka.producer()
     }
 
-    async consume(callback) {
+    async produce(messages) {
         try {
-            await this.consumer.connect()
-            await this.consumer.subscribe({
-                topic: this.topic,
-                fromBeginning: true
-            })
-            await this.consumer.run({
-                eachMessage: async ({topic, partition, message}) => {
-                    const value = message.value.toString()
-                    callback(value)
-                }
-            })
-        } catch (error) {
+        await this.producer.connect()
+        await this.producer.send({
+            topic: this.topic,
+            messages: messages
+        })
+        } catch(error) {
             console.error(error)
+        } finally {
+            await this.producer.disconnect()
         }
     }
 }

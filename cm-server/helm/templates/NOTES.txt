@@ -1,0 +1,5 @@
+{{- $fullName := include "chart.fullname" . -}}
+{{ with (.Values.service) -}}
+Internal URL: http://{{ $fullName }}:{{ .port }}/healthz
+External URL: http://localhost:{{ .nodePort }}/healthz
+{{- end }}
