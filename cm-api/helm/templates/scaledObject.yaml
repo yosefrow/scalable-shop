@@ -1,0 +1,31 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ include "chart.fullname" . }}-kafka
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    name: {{ include "chart.fullname" . }}
+  pollingInterval:  30
+  cooldownPeriod:   300
+  minReplicaCount:  1
+  maxReplicaCount:  15
+  fallback:
+    failureThreshold: 3
+    replicas: 3
+  triggers:
+  - type: kafka
+    metadata:
+      authenticationRef: {{ include "chart.fullname" . }}-kafka-credentials
+      bootstrapServers: $(KAFKA_BROKERS)
+      consumerGroup: $(KAFKA_GROUPID)
+      topic: $(KAFKA_TOPIC)
+      lagThreshold: '5'
+      activationLagThreshold: '3'
+      offsetResetPolicy: latest
+      allowIdleConsumers: 'false'
+      scaleToZeroOnInvalidOffset: 'false'
+      excludePersistentLag: 'false'
+      limitToPartitionsWithLag: 'false'
+      sasl: plaintext

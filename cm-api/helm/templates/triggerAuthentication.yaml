@@ -1,0 +1,14 @@
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: {{ include "chart.fullname" . }}-kafka-credentials
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+spec:
+  secretTargetRef:
+  - parameter: username
+    name: "{{ include "chart.fullname" . }}-env"
+    key: KAFKA_USERNAME
+  - parameter: password
+    name: "{{ include "chart.fullname" . }}-env"
+    key: KAFKA_PASSWORD

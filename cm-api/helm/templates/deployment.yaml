@@ -32,24 +32,17 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          envFrom:
+          - secretRef:
+              name: "{{ include "chart.fullname" . }}-env"            
           env:
           {{- with (.Values.kafka) }}
-            - name: KAFKA_USERNAME
-              value: {{ .username }}
-            - name: KAFKA_PASSWORD
-              value: {{ .password }}
             - name: KAFKA_BROKERS
               value: {{ .brokers }}
-          {{- end -}}  
-          {{- with (.Values.mongodb) }}
-            - name: MONGODB_USERNAME
-              value: {{ .username }}
-            - name: MONGODB_PASSWORD
-              value: {{ .password }}
-            - name: MONGODB_AUTHDB
-              value: {{ .authdb }}
-            - name: MONGODB_HOSTS
-              value: {{ .hosts }}
+            - name: KAFKA_TOPIC
+              value: {{ .topic }}
+            - name: KAFKA_GROUPID
+              value: {{ .groupId }}
+          {{- end }}
             - name: MONGODB_URI
-              value: {{ .uri }}
-          {{- end }}   
+              value: mongodb://$(MONGODB_USERNAME):$(MONGODB_PASSWORD)@$(MONGODB_HOSTS)/$(MONGODB_AUTHDB)
