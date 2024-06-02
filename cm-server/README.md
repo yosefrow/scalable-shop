@@ -49,16 +49,7 @@ provide methods to query cm-api, for example, provides access to `/buyList/{user
 
 ## Local Development
 
-### Docker Environment
-
-Docker compose is used to test the app with docker
-
-run with: `docker-compose up --build`
-test with: `curl localhost:3030/healthz`
-
-### Local Host Environment
-
-You can also perform a more basic test using flask on your host machine
+Run and test locally for development purposes (depends on local databases & queue systems, for example running kafka and mongodb through k3s with helm)
 
 ```bash
 # Setup dev config from repo root dir and configure it
@@ -70,7 +61,7 @@ npm install
 npm run dev
 
 # Test the app
-curl localhost:3000/healthz
+curl localhost:3001/healthz
 ```
 
 ### Helm Chart
