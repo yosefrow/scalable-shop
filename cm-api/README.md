@@ -50,7 +50,6 @@ provided to app.js
 
 *When kafka messages are forwarded to mongo, only valid fields are extracted from the message*
 
-
 ## Considerations
 
 1. we did not overly generalize controllers (it can only either consume or produce depending on the service)

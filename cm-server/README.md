@@ -47,17 +47,6 @@ provided to app.js
 
 provide methods to query cm-api, for example, provides access to `/buyList/{user}` path in cm-api
 
-
-
-
-
-
-
-
-
-
-
-
 ## Considerations
 
 1. we did not overly generalize controllers (it can only either consume or produce depending on the service)

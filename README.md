@@ -36,7 +36,7 @@ MongoDB is installed and configured with helm using PSA configuration. See [mong
 helm upgrade --install mongodb oci://registry-1.docker.io/bitnamicharts/mongodb -f mongodb/values.yaml --namespace mongodb --create-namespace 
 ```
 
-## Customer Managmement API (cm-api)
+## Customer Management API (cm-api)
 
 cm-api is installed and configured with helm. See [cm-api/README.md](cm-api/README.md) for more info.
 
@@ -53,7 +53,7 @@ export VERSION=0.1.0; helm upgrade --install scalable-shop-cm-api oci://registry
   --namespace scalable-shop --create-namespace
 ```
 
-## Customer Managmement API (cm-server)
+## Customer Management API (cm-server)
 
 cm-server is installed and configured with helm. See [cm-api/README.md](cm-server/README.md) for more info.
 
