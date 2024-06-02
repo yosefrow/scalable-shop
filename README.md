@@ -156,3 +156,4 @@ While some efforts were made to increase security and availability, due to the n
 9.  TLS is not used at all, but in production environments, connections should be encrypted with TLS
 10. API Authentication should be used to ensure that requests come form a trusted source
 11. Dedicated non-root users or IAM Authorization should be used for database and queue connections
+12. Secret values should not be placed in the deployment as env vars. They should actually come from a secret (even though atm most clusters use Opaque secrets)
