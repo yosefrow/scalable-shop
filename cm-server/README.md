@@ -1,44 +1,69 @@
-# Customer Management API
+# Customer Management Server
 
-## app.js
+Customer-Management Server for scalable-shop
 
-1.  Method: Get all customer purchases - for specific customer (userid)
-    1.  Query mongoDB for list of all customer purchases
-    2.  Read purchase from MongoDB by userid
-    3.  Originally looks like we want a list of purchases only but based on ui task, looks like we care about purchases for our user only so maybe we should consider storing requests by user ……**.but this kind of feels wrong. The data type is purchases. Maybe we can associate purchases to a user by id somehow 💡**
-    4.  **Example**
-        1.  **User:**
-            1.  **Id**
-            2.  **Name**
-            3.  **Purchases(ids)**
-        2.  **Purchase:** 
-            1.  **Userid:**
-            2.  **Userid.username**
-            3.  **Price,**
-            4.  **timestamp**
-2.  Method: Store data in MongoDB
-    1.  Write purchase data into MongoDB
-3.  Main Loop: Kafka Consumer
-    1.  Watch for and consume messages from Kafka
-        1.  Messages contain “buy” request data object
-            1.  username, userid, price, timestamp
-        2.  Calls Store data in MongoDB Method
+1. Provide Endpoints that are accessed by the customer frontend
+2. Produce events for Kafka based on buy data sent via the customer frontend that are consumed by the cm-api service
 
-## config.js
+## Data structures
 
-## controller.js
+1.  Each purchase consists of the following fields
+    1.  **username:**: name of the user purchasing
+    2.  **userid**: id of the user purchasing
+    3.  **price**: price of the item
+    4.  **timestamp**: when the purchase was received
 
 ## API Definition
 
 - /
-  - returns information about the api
+  - returns information about the API
 - /healthz
   - returns 200, "Success" when successful
-  - returns 503, "Service Unavailable" when healthcheck fails
-- /get-all-user-buys
-  - GET route - Return all customer purchases
+- /getAllUserBuys/{user}
+  - GET route - Return purchases for given user
+- /buy
+  - POST Purchases and send to Kafka 
+
+## app.js
+
+1.  Method: Get all customer purchases for specific customer (username)
+    1.  Query cm-api service with username
+    2.  Return results to the frontend
+
+
+## kafka-config.js
+
+Initialize kafka produce configuration as an importable module.
+Provide method to produce for kafka-controller
+
+## kafka-controller.js
+
+include kafka-config module and use it to get kafka methods and configurations
+provided to app.js
+
+*When posted requests are sent to kafka, only valid fields are extracted from the body*
+
+## api-controller.js
+
+provide methods to query cm-api, for example, provides access to `/buyList/{user}` path in cm-api
+
+
+
+
+
+
+
+
+
+
+
 
 ## Considerations
+
+1. we did not overly generalize controllers (it can only either consume or produce depending on the service)
+2. caching and more unique message lookup scenarios were not part of the design
+3. It might be better to store users in a separate collection with userid and username and then lookup userid or username with whichever we use at the user key
+4. Additionally we can consider a design where we add purchase ids and update a users list of purchase ids, so it isn't needed to find which purchases are associated with a user every time.
 
 ## Local Development
 
@@ -54,10 +79,11 @@ test with: `curl localhost:3030/healthz`
 You can also perform a more basic test using flask on your host machine
 
 ```bash
-# Setup dev config and configure it
+# Setup dev config from repo root dir and configure it
 cp .env.example .env
 
 # Install and Run th app
+cd cm-server
 npm install
 npm run dev
 
@@ -67,23 +93,25 @@ curl localhost:3000/healthz
 
 ### Helm Chart
 
-Build Image for k8s Architecture with `./scripts/docker-build-and-push.sh ./cm-api yosefrow/scalable-shop-cm-api:latest`
+Build Image for k8s Architecture with `./scripts/docker-build-and-push.sh ./cm-server yosefrow/scalable-shop-cm-server:latest`
 
-Package and Push with `scripts/helm-package-and-push.sh cm-api/helm yosefrow`
+Package and Push with `scripts/helm-package-and-push.sh cm-server/helm yosefrow`
 
 ## Helm Commands
 
 - *Install & Upgrade*:
 ```bash
-export VERSION=0.1.0
 export KAFKA_PASSWORD="$(kubectl get secret kafka-user-passwords -n kafka -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)"
-helm upgrade --install scalable-shop-cm-api oci://registry-1.docker.io/yosefrow/scalable-shop-cm-api \
-  --version "$VERSION" --set kafka.password="$KAFKA_PASSWORD" \
+
+export VERSION=0.1.0; helm upgrade --install scalable-shop-cm-server oci://registry-1.docker.io/yosefrow/scalable-shop-cm-server \
+  --version "$VERSION" \
+  --set kafka.password="$KAFKA_PASSWORD" \
+  --set mongodb.password="$MONGODB_ROOT_PASSWORD" \
   --namespace scalable-shop --create-namespace
 ```
 - *Uninstall*:
-  - `helm uninstall scalable-shop-cm-api --namespace scalable-shop`
+  - `helm uninstall scalable-shop-cm-server --namespace scalable-shop`
 - *Template*
   - `helm template $CHART`
 - *Test*
-  - `helm test scalable-shop-cm-api --namespace scalable-shop`
+  - `helm test scalable-shop-cm-server --namespace scalable-shop`

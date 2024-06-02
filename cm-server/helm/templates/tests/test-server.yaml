@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "chart.fullname" . }}-test-api"
+  name: "{{ include "chart.fullname" . }}-test-server"
   labels:
     {{- include "chart.labels" . | nindent 4 }}
   annotations:

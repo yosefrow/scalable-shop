@@ -32,12 +32,16 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{ with (.Values.kafka) -}}
           env:
+          {{- with (.Values.kafka) }}
             - name: KAFKA_USERNAME
               value: {{ .username }}
             - name: KAFKA_PASSWORD
               value: {{ .password }}
             - name: KAFKA_BROKERS
               value: {{ .brokers }}
-          {{- end }}  
+          {{- end -}}  
+          {{- with (.Values.cmApi) }}
+            - name: CM_API_HOST
+              value: {{ .host }}
+          {{- end }} 
