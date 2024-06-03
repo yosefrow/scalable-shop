@@ -1,3 +1,4 @@
+{{- if .Values.autoscaling.enabled }}
 apiVersion: keda.sh/v1alpha1
 kind: TriggerAuthentication
 metadata:
@@ -12,3 +13,4 @@ spec:
   - parameter: password
     name: "{{ include "chart.fullname" . }}-env"
     key: KAFKA_PASSWORD
+{{- end -}}
