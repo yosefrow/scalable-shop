@@ -13,19 +13,16 @@ spec:
   maxReplicaCount:  15
   fallback:
     failureThreshold: 3
-    replicas: 3
+    replicas: 2
   triggers:
   - type: kafka
     metadata:
-      authenticationRef: {{ include "chart.fullname" . }}-kafka-credentials
-      bootstrapServers: $(KAFKA_BROKERS)
-      consumerGroup: $(KAFKA_GROUPID)
-      topic: $(KAFKA_TOPIC)
+      bootstrapServersFromEnv: KAFKA_BROKERS
+      consumerGroupFromEnv: KAFKA_GROUPID
+      topicFromEnv: KAFKA_TOPIC
       lagThreshold: '5'
-      activationLagThreshold: '3'
       offsetResetPolicy: latest
       allowIdleConsumers: 'false'
-      scaleToZeroOnInvalidOffset: 'false'
-      excludePersistentLag: 'false'
-      limitToPartitionsWithLag: 'false'
       sasl: plaintext
+    authenticationRef: 
+      name: "{{ include "chart.fullname" . }}-kafka-credentials"

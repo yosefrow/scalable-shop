@@ -49,6 +49,16 @@ helm repo update
 helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
 ```
 
+## KEDA Autoscaler
+
+Install KEDA Autoscaler to handle autoscaling based on requests
+
+```bash
+helm repo add kedacore https://kedacore.github.io/charts
+helm repo update
+helm install keda kedacore/keda --namespace keda --create-namespace
+```
+
 ## Customer Management API (cm-api)
 
 Customer-Management API for scalable-shop

@@ -79,7 +79,7 @@ Package and Push with `scripts/helm-package-and-push.sh cm-api/helm yosefrow`
 export KAFKA_PASSWORD="$(kubectl get secret kafka-user-passwords -n kafka -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)"
 export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace mongodb mongodb -o jsonpath="{.data.mongodb-root-password}" | base64 -d)
 
-export VERSION=0.1.0; helm upgrade --install scalable-shop-cm-api helm \
+export VERSION=0.1.0; helm upgrade --install scalable-shop-cm-api oci://registry-1.docker.io/yosefrow/scalable-shop-cm-api \
   --version "$VERSION" \
   --set kafka.secrets.password="$KAFKA_PASSWORD" \
   --set mongodb.secrets.password="$MONGODB_ROOT_PASSWORD" \
